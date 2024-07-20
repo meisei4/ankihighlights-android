@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.ankihighlights.android.network.HighlightData
-import com.ankihighlights.android.network.RetrofitAnkiNetwork
+import com.ankihighlights.android.network.RetrofitHighlightController
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -34,20 +34,20 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var retrofitAnkiNetwork: RetrofitAnkiNetwork
+    @Inject lateinit var retrofitHighlightController: RetrofitHighlightController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            VocabHighlighterApp(retrofitAnkiNetwork)
+            VocabHighlighterApp(retrofitHighlightController)
         }
     }
 }
 
 @Suppress("ktlint:standard:function-naming")
 @Composable
-fun VocabHighlighterApp(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
+fun VocabHighlighterApp(retrofitAnkiNetwork: RetrofitHighlightController) {
     MaterialTheme {
         HighlightScreen(retrofitAnkiNetwork)
     }
@@ -56,7 +56,7 @@ fun VocabHighlighterApp(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
 // TODO: Shouldnt Composable annotation overpower the function naming (k)linter issue?
 @Suppress("ktlint:standard:function-naming")
 @Composable
-fun HighlightScreen(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
+fun HighlightScreen(retrofitAnkiNetwork: RetrofitHighlightController) {
     var textState by remember { mutableStateOf(TextFieldValue("This is an example text that you can highlight to create an Anki card.")) }
     var selectedText by remember { mutableStateOf("") }
 
@@ -84,7 +84,7 @@ fun HighlightScreen(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
 }
 
 fun sendHighlightToApi(
-    retrofitAnkiNetwork: RetrofitAnkiNetwork,
+    retrofitAnkiNetwork: RetrofitHighlightController,
     word: String,
     context: String,
     timestamp: Long,
