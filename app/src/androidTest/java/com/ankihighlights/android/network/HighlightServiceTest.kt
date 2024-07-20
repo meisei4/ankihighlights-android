@@ -5,6 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -18,9 +19,12 @@ class HighlightServiceTest {
     @Before
     fun setUp() {
         val json = Json { ignoreUnknownKeys = true }
+        val client = OkHttpClient.Builder().build()
+
         val retrofit =
             Retrofit.Builder()
-                .baseUrl("http://your-flask-api-url/") // Replace with your actual Flask API base URL
+                .baseUrl(BuildConfig.BASE_URL) // Uses the BuildConfig BASE_URL
+                .client(client)
                 .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
                 .build()
 
