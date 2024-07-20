@@ -1,7 +1,7 @@
-package com.example.anki_highlights
+package com.ankihighlights.android
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class VocabHighlighterApplication : Application()
+class AnkiHighlightsApplication : Application()

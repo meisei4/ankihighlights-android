@@ -1,4 +1,4 @@
-package com.example.anki_highlights.ui.theme
+package com.ankihighlights.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

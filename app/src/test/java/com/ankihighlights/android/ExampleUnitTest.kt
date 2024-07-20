@@ -1,8 +1,7 @@
-package com.example.anki_highlights
-
-import org.junit.Test
+package com.ankihighlights.android
 
 import org.junit.Assert.*
+import org.junit.Test
 
 /**
  * Example local unit test, which will execute on the development machine (host).

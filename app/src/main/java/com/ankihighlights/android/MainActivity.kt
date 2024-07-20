@@ -1,19 +1,30 @@
-package com.example.anki_highlights
+package com.ankihighlights.android
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.anki_highlights.network.HighlightData
-import com.example.anki_highlights.network.RetrofitAnkiNetwork
+import com.ankihighlights.android.network.HighlightData
+import com.ankihighlights.android.network.RetrofitAnkiNetwork
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -34,6 +45,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Suppress("ktlint:standard:function-naming")
 @Composable
 fun VocabHighlighterApp(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
     MaterialTheme {
@@ -41,6 +53,8 @@ fun VocabHighlighterApp(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
     }
 }
 
+// TODO: Shouldnt Composable annotation overpower the function naming (k)linter issue?
+@Suppress("ktlint:standard:function-naming")
 @Composable
 fun HighlightScreen(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
     var textState by remember { mutableStateOf(TextFieldValue("This is an example text that you can highlight to create an Anki card.")) }
@@ -54,7 +68,7 @@ fun HighlightScreen(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
                     textState = it
                     selectedText = it.text.substring(it.selection.start, it.selection.end)
                 },
-                modifier = Modifier.fillMaxWidth().height(200.dp)
+                modifier = Modifier.fillMaxWidth().height(200.dp),
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -69,19 +83,32 @@ fun HighlightScreen(retrofitAnkiNetwork: RetrofitAnkiNetwork) {
     }
 }
 
-fun sendHighlightToApi(retrofitAnkiNetwork: RetrofitAnkiNetwork, word: String, context: String, timestamp: Long) {
+fun sendHighlightToApi(
+    retrofitAnkiNetwork: RetrofitAnkiNetwork,
+    word: String,
+    context: String,
+    timestamp: Long,
+) {
     val highlightData = HighlightData(word, context, timestamp)
-    retrofitAnkiNetwork.processHighlights(highlightData).enqueue(object : Callback<ResponseBody> {
-        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-            if (response.isSuccessful) {
-                Toast.makeText(retrofitAnkiNetwork.context, "Highlight sent successfully", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(retrofitAnkiNetwork.context, "Failed to send highlight", Toast.LENGTH_SHORT).show()
+    retrofitAnkiNetwork.processHighlights(highlightData).enqueue(
+        object : Callback<ResponseBody> {
+            override fun onResponse(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>,
+            ) {
+                if (response.isSuccessful) {
+                    Toast.makeText(retrofitAnkiNetwork.context, "Highlight sent successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(retrofitAnkiNetwork.context, "Failed to send highlight", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
 
-        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-            Toast.makeText(retrofitAnkiNetwork.context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-        }
-    })
+            override fun onFailure(
+                call: Call<ResponseBody>,
+                t: Throwable,
+            ) {
+                Toast.makeText(retrofitAnkiNetwork.context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        },
+    )
 }
