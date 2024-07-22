@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.kotlin.android.ksp) apply false
     alias(libs.plugins.kotlin.plugin.compose) apply false
-    // alias(libs.plugins.dotenv.gradle) apply true
 }
 
 allprojects {
