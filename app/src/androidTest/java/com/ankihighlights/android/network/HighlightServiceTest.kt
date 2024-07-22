@@ -1,12 +1,15 @@
 package com.ankihighlights.android.network
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ankihighlights.android.BuildConfig
+import com.ankihighlights.android.model.HighlightData
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,12 +35,20 @@ class HighlightServiceTest {
     }
 
     @Test
-    fun testProcessHighlightsApiCall() =
-        runBlocking {
-            val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
-            val response = apiService.processHighlights(highlightData).execute()
+    fun testProcessHighlightsApiCall() = runBlocking {
+        val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
+        val response = apiService.processHighlights(highlightData).execute()
 
-            assertEquals("The API call was not successful", true, response.isSuccessful)
-            assertEquals("Unexpected response code", 200, response.code())
+        assertEquals("The API call was not successful", true, response.isSuccessful)
+        assertEquals("Unexpected response code", 200, response.code())
+
+        // Add more assertions to check the response body
+        val responseBody = response.body()
+        assertNotNull("Response body is null", responseBody)
+        responseBody?.let {
+            assertEquals("Response success field is not true", true, it.success)
+            assertNotNull("Response data field is null", it.data)
+            assertEquals("Unexpected message", "highlights processed successfully.", it.message)
         }
+    }
 }
