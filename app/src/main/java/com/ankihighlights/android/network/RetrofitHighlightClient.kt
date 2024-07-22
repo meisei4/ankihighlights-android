@@ -1,26 +1,27 @@
 package com.ankihighlights.android.network
 
-import com.ankihighlights.android.network.HighlightService
+import com.ankihighlights.android.BuildConfig
+import com.ankihighlights.android.repository.service.HighlightService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import retrofit2.Retrofit
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object RetrofitClient {
-    private const val BASE_URL = "http://your-api-url.com/"
+@Singleton
+class RetrofitHighlightClient @Inject constructor(
+    json: Json,
+    okHttpClient: OkHttpClient
+) {
 
     private val contentType = "application/json".toMediaType()
 
-    private val json = Json { ignoreUnknownKeys = true }
-
-    val instance: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(json.asConverterFactory(contentType))
-            .build()
-    }
-
-    val highlightService: HighlightService by lazy {
-        instance.create(HighlightService::class.java)
-    }
+    val highlightService: HighlightService = Retrofit.Builder()
+        .baseUrl(BuildConfig.BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(json.asConverterFactory(contentType))
+        .build()
+        .create(HighlightService::class.java)
 }
