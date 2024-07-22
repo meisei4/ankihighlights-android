@@ -8,12 +8,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import retrofit2.Retrofit
+
 
 @RunWith(AndroidJUnit4::class)
 class HighlightServiceTest {
@@ -26,7 +26,7 @@ class HighlightServiceTest {
 
         val retrofit =
             Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL) // Uses the BuildConfig BASE_URL
+                .baseUrl(BuildConfig.BASE_URL)
                 .client(client)
                 .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
                 .build()
@@ -35,20 +35,38 @@ class HighlightServiceTest {
     }
 
     @Test
-    fun testProcessHighlightsApiCall() = runBlocking {
-        val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
-        val response = apiService.processHighlights(highlightData).execute()
+    fun testProcessHighlightsApiCall() {
+        runBlocking {
+            val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
+            val response = apiService.processHighlights(highlightData).execute()
 
-        assertEquals("The API call was not successful", true, response.isSuccessful)
-        assertEquals("Unexpected response code", 200, response.code())
+            assertTrue("The API call was not successful", response.isSuccessful)
+            assertEquals("Unexpected response code", 200, response.code())
 
-        // Add more assertions to check the response body
-        val responseBody = response.body()
-        assertNotNull("Response body is null", responseBody)
-        responseBody?.let {
-            assertEquals("Response success field is not true", true, it.success)
-            assertNotNull("Response data field is null", it.data)
-            assertEquals("Unexpected message", "highlights processed successfully.", it.message)
+            val responseBody = response.body()
+            assertNotNull("Response body is null", responseBody)
+            responseBody?.let {
+                assertTrue("Response success field is not true", it.success)
+                assertNotNull("Response data field is null", it.data)
+                assertEquals("Unexpected message", "highlights processed successfully.", it.message)
+            }
+        }
+    }
+
+    @Test
+    fun testTestEndpoint() {
+        runBlocking {
+            val response = apiService.testEndpoint().execute()
+
+            assertTrue("The API call was not successful", response.isSuccessful)
+            assertEquals("Unexpected response code", 200, response.code())
+
+            val responseBody = response.body()
+            assertNotNull("Response body is null", responseBody)
+            responseBody?.let {
+                assertTrue("Response success field is not true", it.success)
+                assertEquals("Unexpected message", "Test endpoint is working!", it.message)
+            }
         }
     }
 }
