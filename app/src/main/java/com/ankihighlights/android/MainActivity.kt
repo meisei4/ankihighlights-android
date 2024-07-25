@@ -3,7 +3,7 @@ package com.ankihighlights.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import com.ankihighlights.android.viewmodel.HighlightViewModel
+import com.ankihighlights.android.view.viewmodel.HighlightViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

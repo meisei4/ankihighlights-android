@@ -1,4 +1,4 @@
-package com.ankihighlights.android.viewmodel
+package com.ankihighlights.android.view.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
