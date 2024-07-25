@@ -1,4 +1,4 @@
-package com.ankihighlights.android.network
+package com.ankihighlights.android.repository.service
 
 import com.ankihighlights.android.model.HighlightData
 import com.ankihighlights.android.model.HighlightResponse
@@ -9,13 +9,18 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface HighlightService {
+
     @POST("highlight/process")
     fun processHighlights(
-        @Body highlightData: HighlightData,
+        @Body highlightData: HighlightData
     ): Call<HighlightResponse>
 
 
     @GET("/highlight/test")
     fun testEndpoint(): Call<TestResponse>
+
 }
+
+
+
 
