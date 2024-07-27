@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.ankihighlights.android.AnkiHighlightsTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -51,7 +51,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
-
 }
 
 dependencies {
@@ -67,7 +66,7 @@ dependencies {
     implementation(libs.androidx.tracing.ktx)
 
     implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler) //TODO: implementation not kst/kpt anything other than ksp here causes huge issues
+    ksp(libs.hilt.compiler) // TODO: implementation not kst/kpt anything other than ksp here causes huge issues
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit.core)
@@ -77,10 +76,9 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
 
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.hilt.android.testing)
-
-
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

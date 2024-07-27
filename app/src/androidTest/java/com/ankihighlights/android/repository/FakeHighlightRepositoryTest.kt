@@ -12,18 +12,17 @@ import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
 
-//TODO: this doesnt just work without defining a target app that can be found in a corresponding manifest
+// TODO: this doesnt just work without defining a target app that can be found in a corresponding manifest
 //  This is the BIGGEST t2do for next time i look at this code.
 //  -- Need to focus on why Nia has its directories split up so much like it does,
 //  -- rather than just sticking to the simple Main, Integration test, and Unit test it has many test directories outside of that
 @HiltAndroidTest
 class FakeHighlightRepositoryTest {
-
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var highlightRepository: HighlightRepository
+    lateinit var highlightRepository: FakeHighlightRepository
 
     @Before
     fun setUp() {
@@ -42,7 +41,7 @@ class FakeHighlightRepositoryTest {
                 assertEquals(
                     "Unexpected message",
                     "Fake highlights processed successfully.",
-                    response?.message
+                    response?.message,
                 )
             }
         }

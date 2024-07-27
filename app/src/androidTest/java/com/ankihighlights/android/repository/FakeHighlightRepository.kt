@@ -18,25 +18,29 @@ import javax.inject.Inject
  * This literally taken from Nia's use of Hilt. i.e. Mockito NEVER AGAIN
  */
 
-class FakeHighlightRepository @Inject constructor() : HighlightRepository {
+class FakeHighlightRepository
+    @Inject
+    constructor() : HighlightRepository {
+        override fun processHighlights(highlightData: HighlightData): LiveData<HighlightResponse> {
+            val liveData = MutableLiveData<HighlightResponse>()
+            val fakeData =
+                listOf(
+                    HighlightDTO(
+                        id = 1,
+                        word = "test",
+                        context = "example",
+                        timestamp = 1234567890L,
+                    ),
+                )
+            val fakeResponse =
+                HighlightResponse(
+                    success = true,
+                    data = HighlightDataWrapper(fakeData),
+                    message = "Fake highlights processed successfully.",
+                )
 
-    override fun processHighlights(highlightData: HighlightData): LiveData<HighlightResponse> {
-        val fakeData = listOf(
-            HighlightDTO(
-                id = 1,
-                word = "test",
-                context = "example",
-                timestamp = 1234567890L
-            )
-        )
-        val fakeResponse = HighlightResponse(
-            success = true,
-            data = HighlightDataWrapper(fakeData),
-            message = "Fake highlights processed successfully."
-        )
-        val liveData = MutableLiveData<HighlightResponse>()
-        liveData.value = fakeResponse
-        return liveData
+            liveData.postValue(fakeResponse)
+
+            return liveData
+        }
     }
-}
-
