@@ -4,6 +4,6 @@ import com.ankihighlights.android.model.HighlightData
 import com.ankihighlights.android.model.HighlightResponse
 import kotlinx.coroutines.flow.Flow
 
-interface HighlightRepository {
+fun interface NetworkHighlightRepository {
     fun processHighlights(highlightData: HighlightData): Flow<HighlightResponse>
 }

@@ -1,6 +1,7 @@
-package com.ankihighlights.android.repository
+package com.ankihighlights.android
 
 import com.ankihighlights.android.model.HighlightData
+import com.ankihighlights.android.repository.FakeNetworkHighlightRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
@@ -14,12 +15,13 @@ import org.junit.Test
 import javax.inject.Inject
 
 @HiltAndroidTest
-class FakeHighlightRepositoryTest {
+class FakeNetworkHighlightRepositoryTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+    // Inject HighlightRepository (which will be FakeHighlightRepository during tests)
     @Inject
-    lateinit var highlightRepository: FakeHighlightRepository
+    lateinit var highlightRepository: FakeNetworkHighlightRepository
 
     @Before
     fun setUp() {
