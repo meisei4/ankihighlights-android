@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
- * Fake implementation of the [HighlightRepository] that retrieves the highlights from a hardcoded [HighlightDTO].
+ * Fake implementation of the [NetworkHighlightRepository] that retrieves the highlights from a hardcoded [HighlightDTO].
  *
  * This allows us to run the app with fake data, without needing an internet connection or working
  * backend.
@@ -18,9 +18,9 @@ import javax.inject.Inject
  * This literally taken from Nia's use of Hilt. i.e. Mockito NEVER AGAIN
  */
 
-class FakeHighlightRepository
+class FakeNetworkHighlightRepository
     @Inject
-    constructor() : HighlightRepository {
+    constructor() : NetworkHighlightRepository {
         override fun processHighlights(highlightData: HighlightData): Flow<HighlightResponse> =
             flow {
                 val fakeData =
