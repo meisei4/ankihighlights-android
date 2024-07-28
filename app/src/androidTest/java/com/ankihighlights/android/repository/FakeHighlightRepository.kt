@@ -1,11 +1,11 @@
 package com.ankihighlights.android.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.ankihighlights.android.model.HighlightData
 import com.ankihighlights.android.model.HighlightDataWrapper
 import com.ankihighlights.android.model.HighlightResponse
 import com.ankihighlights.android.model.dto.HighlightDTO
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -21,26 +21,24 @@ import javax.inject.Inject
 class FakeHighlightRepository
     @Inject
     constructor() : HighlightRepository {
-        override fun processHighlights(highlightData: HighlightData): LiveData<HighlightResponse> {
-            val liveData = MutableLiveData<HighlightResponse>()
-            val fakeData =
-                listOf(
-                    HighlightDTO(
-                        id = 1,
-                        word = "test",
-                        context = "example",
-                        timestamp = 1234567890L,
-                    ),
-                )
-            val fakeResponse =
-                HighlightResponse(
-                    success = true,
-                    data = HighlightDataWrapper(fakeData),
-                    message = "Fake highlights processed successfully.",
-                )
+        override fun processHighlights(highlightData: HighlightData): Flow<HighlightResponse> =
+            flow {
+                val fakeData =
+                    listOf(
+                        HighlightDTO(
+                            id = 1,
+                            word = "test",
+                            context = "example",
+                            timestamp = 1234567890L,
+                        ),
+                    )
+                val fakeResponse =
+                    HighlightResponse(
+                        success = true,
+                        data = HighlightDataWrapper(fakeData),
+                        message = "Fake highlights processed successfully.",
+                    )
 
-            liveData.postValue(fakeResponse)
-
-            return liveData
-        }
+                emit(fakeResponse)
+            }
     }

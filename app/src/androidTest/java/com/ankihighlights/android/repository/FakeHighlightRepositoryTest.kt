@@ -3,6 +3,7 @@ package com.ankihighlights.android.repository
 import com.ankihighlights.android.model.HighlightData
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -12,17 +13,13 @@ import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
 
-// TODO: this doesnt just work without defining a target app that can be found in a corresponding manifest
-//  This is the BIGGEST t2do for next time i look at this code.
-//  -- Need to focus on why Nia has its directories split up so much like it does,
-//  -- rather than just sticking to the simple Main, Integration test, and Unit test it has many test directories outside of that
 @HiltAndroidTest
 class FakeHighlightRepositoryTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var highlightRepository: FakeHighlightRepository
+    lateinit var highlightRepository: HighlightRepository
 
     @Before
     fun setUp() {
@@ -30,20 +27,20 @@ class FakeHighlightRepositoryTest {
     }
 
     @Test
-    fun testProcessHighlightsWithFakeData() {
+    fun testProcessHighlightsWithFakeData() =
         runBlocking {
             val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
-            val liveData = highlightRepository.processHighlights(highlightData)
+            val flow = highlightRepository.processHighlights(highlightData)
 
-            liveData.observeForever { response ->
-                assertNotNull("Response is null", response)
-                assertTrue("Response success field is not true", response?.success ?: false)
-                assertEquals(
-                    "Unexpected message",
-                    "Fake highlights processed successfully.",
-                    response?.message,
-                )
-            }
+            // Using flow's first() to get the first emitted value from the flow
+            val response = flow.first()
+
+            assertNotNull("Response is null", response)
+            assertTrue("Response success field is not true", response.success)
+            assertEquals(
+                "Unexpected message",
+                "Fake highlights processed successfully.",
+                response.message,
+            )
         }
-    }
 }
