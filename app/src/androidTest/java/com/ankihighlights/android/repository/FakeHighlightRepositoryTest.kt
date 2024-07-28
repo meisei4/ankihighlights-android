@@ -19,7 +19,7 @@ class FakeHighlightRepositoryTest {
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
-    lateinit var highlightRepository: HighlightRepository
+    lateinit var highlightRepository: FakeHighlightRepository
 
     @Before
     fun setUp() {
@@ -30,10 +30,7 @@ class FakeHighlightRepositoryTest {
     fun testProcessHighlightsWithFakeData() =
         runBlocking {
             val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
-            val flow = highlightRepository.processHighlights(highlightData)
-
-            // Using flow's first() to get the first emitted value from the flow
-            val response = flow.first()
+            val response = highlightRepository.processHighlights(highlightData).first()
 
             assertNotNull("Response is null", response)
             assertTrue("Response success field is not true", response.success)
@@ -42,5 +39,14 @@ class FakeHighlightRepositoryTest {
                 "Fake highlights processed successfully.",
                 response.message,
             )
+            assertNotNull("Data is null", response.data)
+            assertTrue("Data list is empty", response.data?.highlight?.isNotEmpty() == true)
+
+            val highlight = response.data?.highlight?.firstOrNull()
+            assertNotNull("Highlight item is null", highlight)
+            assertEquals("Unexpected word", "test", highlight?.word)
+            assertEquals("Unexpected context", "example", highlight?.context)
+            assertEquals("Unexpected id", 1, highlight?.id)
+            assertEquals("Unexpected timestamp", 1234567890L, highlight?.timestamp)
         }
 }
