@@ -1,5 +1,6 @@
 package com.ankihighlights.android.repository
 
+import android.util.Log
 import com.ankihighlights.android.model.HighlightData
 import com.ankihighlights.android.model.HighlightResponse
 import com.ankihighlights.android.repository.service.HighlightService
@@ -19,13 +20,16 @@ class HighlightDataRepository
                 try {
                     val response = highlightService.processHighlights(highlightData).execute()
                     if (response.isSuccessful) {
-                        response.body()?.let { emit(it) }
+                        response.body()?.let {
+                            emit(it)
+                        } ?: run {
+                            Log.e("HighlightRepo", "Response body is null")
+                        }
                     } else {
-                        // Handle response errors, e.g., throw an exception or emit an error state
+                        Log.e("HighlightRepo", "Response unsuccessful: ${response.errorBody()}")
                     }
                 } catch (e: Exception) {
-                    // Handle network or other errors
-                    // Optionally emit an error state
+                    Log.e("HighlightRepo", "Error processing highlights", e)
                 }
             }
     }
