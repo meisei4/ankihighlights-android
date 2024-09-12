@@ -3,8 +3,6 @@ package com.ankihighlights.android.repository
 import android.util.Log
 import com.ankihighlights.android.model.HighlightData
 import com.ankihighlights.android.model.HighlightResponse
-import com.ankihighlights.android.model.cache.HighlightCacheEntity
-import com.ankihighlights.android.model.cache.HighlightDAO
 import com.ankihighlights.android.repository.service.HighlightService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,12 +10,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HighlightDataRepository
+class NetworkHighlightDataRepository
     @Inject
     constructor(
         private val highlightService: HighlightService,
-        private val highlightDao: HighlightDAO,
-    ) : HighlightRepository {
+    ) : NetworkHighlightRepository {
         override fun processHighlights(highlightData: HighlightData): Flow<HighlightResponse> =
             flow {
                 try {
@@ -33,17 +30,4 @@ class HighlightDataRepository
                     Log.e("HighlightRepo", "Error processing highlights", e)
                 }
             }
-
-        suspend fun cacheHighlight(highlightText: String) {
-            highlightDao.insertHighlight(
-                HighlightCacheEntity(
-                    highlightedText = highlightText,
-                    timestamp = System.currentTimeMillis(),
-                ),
-            )
-        }
-
-        fun getCachedHighlights(): Flow<List<HighlightCacheEntity>> {
-            return highlightDao.getRecentHighlights()
-        }
     }

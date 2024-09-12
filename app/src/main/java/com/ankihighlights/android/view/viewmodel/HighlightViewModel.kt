@@ -3,7 +3,7 @@ package com.ankihighlights.android.view.viewmodel
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ankihighlights.android.repository.HighlightDataRepository
+import com.ankihighlights.android.repository.HighlightDataCoordinator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,15 +15,14 @@ import javax.inject.Inject
 class HighlightViewModel
     @Inject
     constructor(
-        private val repository: HighlightDataRepository,
+        private val coordinator: HighlightDataCoordinator,
     ) : ViewModel() {
         private val _cachedHighlights = MutableStateFlow<List<String>>(emptyList())
         val cachedHighlights: StateFlow<List<String>> = _cachedHighlights.asStateFlow()
 
         init {
-            // Load cached highlights from Room on initialization
             viewModelScope.launch {
-                repository.getCachedHighlights().collect { cachedHighlights ->
+                coordinator.getCachedHighlights().collect { cachedHighlights ->
                     _cachedHighlights.value = cachedHighlights.map { it.highlightedText }
                 }
             }
@@ -33,7 +32,7 @@ class HighlightViewModel
             intent?.getStringExtra(Intent.EXTRA_PROCESS_TEXT)?.let { highlightedText ->
                 if (highlightedText.isNotBlank()) {
                     viewModelScope.launch {
-                        repository.cacheHighlight(highlightedText)
+                        coordinator.cacheHighlightLocally(highlightedText)
                     }
                 }
             }

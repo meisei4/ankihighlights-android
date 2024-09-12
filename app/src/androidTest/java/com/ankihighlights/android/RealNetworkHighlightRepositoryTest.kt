@@ -1,7 +1,8 @@
-package com.ankihighlights.android.repository
+package com.ankihighlights.android
 
-import com.ankihighlights.android.BuildConfig
 import com.ankihighlights.android.model.HighlightData
+import com.ankihighlights.android.repository.NetworkHighlightDataRepository
+import com.ankihighlights.android.repository.NetworkHighlightRepository
 import com.ankihighlights.android.repository.service.HighlightService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.flow.first
@@ -19,8 +20,8 @@ import org.junit.runners.JUnit4
 import retrofit2.Retrofit
 
 @RunWith(JUnit4::class)
-class RealHighlightRepositoryTest {
-    private lateinit var highlightRepository: HighlightRepository
+class RealNetworkHighlightRepositoryTest {
+    private lateinit var networkHighlightRepository: NetworkHighlightRepository
 
     @Before
     fun setUp() {
@@ -36,16 +37,14 @@ class RealHighlightRepositoryTest {
 
         val highlightService = retrofit.create(HighlightService::class.java)
 
-        val fakeHighlightDao = FakeHighlightDAO() // TODO: This is to remove need for cache
-
-        highlightRepository = HighlightDataRepository(highlightService, fakeHighlightDao)
+        networkHighlightRepository = NetworkHighlightDataRepository(highlightService)
     }
 
     @Test
     fun testProcessHighlightsWithRealApi() =
         runBlocking {
             val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
-            val highlightFlow = highlightRepository.processHighlights(highlightData)
+            val highlightFlow = networkHighlightRepository.processHighlights(highlightData)
 
             val response = highlightFlow.first()
 
