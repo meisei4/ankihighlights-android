@@ -1,6 +1,7 @@
 package com.ankihighlights.android.view.viewmodel
 
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ankihighlights.android.repository.HighlightDataCoordinator
@@ -31,10 +32,13 @@ class HighlightViewModel
         fun processIncomingIntent(intent: Intent?) {
             intent?.getStringExtra(Intent.EXTRA_PROCESS_TEXT)?.let { highlightedText ->
                 if (highlightedText.isNotBlank()) {
+                    Log.d("HighlightViewModel", "Processing highlighted text: $highlightedText")
                     viewModelScope.launch {
                         coordinator.cacheHighlightLocally(highlightedText)
                     }
+                } else {
+                    Log.d("HighlightViewModel", "Received blank or invalid highlighted text")
                 }
-            }
+            } ?: Log.d("HighlightViewModel", "Intent does not contain EXTRA_PROCESS_TEXT")
         }
     }

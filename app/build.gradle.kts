@@ -82,6 +82,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.tracing.ktx)
 
+    testImplementation(libs.androidx.compose.ui)
+
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler) // TODO: implementation not kst/kpt anything other than ksp here causes huge issues
