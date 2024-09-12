@@ -19,7 +19,6 @@ class FakeNetworkHighlightRepositoryTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    // Inject HighlightRepository (which will be FakeHighlightRepository during tests)
     @Inject
     lateinit var highlightRepository: FakeNetworkHighlightRepository
 

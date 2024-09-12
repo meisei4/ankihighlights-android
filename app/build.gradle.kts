@@ -32,13 +32,6 @@ android {
             } else {
                 throw IllegalStateException("FLASK_API_URL must not be null")
             }
-
-            val useFakeRepository: String? = project.findProperty("USE_FAKE_REPOSITORY") as String?
-            if (useFakeRepository != null) {
-                buildConfigField("boolean", "USE_FAKE_REPOSITORY", useFakeRepository)
-            } else {
-                throw IllegalStateException("USE_FAKE_REPOSITORY must not be null")
-            }
         }
 
         release {
@@ -81,6 +74,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.tracing.ktx)
+
+    testImplementation(libs.androidx.compose.ui)
 
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)

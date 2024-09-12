@@ -1,9 +1,9 @@
 package com.ankihighlights.android
 
+import com.ankihighlights.android.data.network.HighlightApi
+import com.ankihighlights.android.data.repository.NetworkHighlightDataRepository
+import com.ankihighlights.android.data.repository.NetworkHighlightRepository
 import com.ankihighlights.android.model.HighlightData
-import com.ankihighlights.android.repository.NetworkHighlightDataRepository
-import com.ankihighlights.android.repository.NetworkHighlightRepository
-import com.ankihighlights.android.repository.service.HighlightService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -35,9 +35,9 @@ class RealNetworkHighlightRepositoryTest {
                 .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
                 .build()
 
-        val highlightService = retrofit.create(HighlightService::class.java)
+        val highlightApi = retrofit.create(HighlightApi::class.java)
 
-        networkHighlightRepository = NetworkHighlightDataRepository(highlightService)
+        networkHighlightRepository = NetworkHighlightDataRepository(highlightApi)
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.ankihighlights.android.repository
 
-import com.ankihighlights.android.model.cache.HighlightCacheEntity
+import com.ankihighlights.android.data.local.HighlightCacheEntity
+import com.ankihighlights.android.data.repository.LocalHighlightRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
