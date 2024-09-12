@@ -35,7 +35,10 @@ class RealHighlightRepositoryTest {
                 .build()
 
         val highlightService = retrofit.create(HighlightService::class.java)
-        highlightRepository = HighlightDataRepository(highlightService)
+
+        val fakeHighlightDao = FakeHighlightDAO() // TODO: This is to remove need for cache
+
+        highlightRepository = HighlightDataRepository(highlightService, fakeHighlightDao)
     }
 
     @Test
@@ -44,7 +47,6 @@ class RealHighlightRepositoryTest {
             val highlightData = HighlightData("testWord", "testContext", System.currentTimeMillis())
             val highlightFlow = highlightRepository.processHighlights(highlightData)
 
-            // Collecting the first item from the flow to test the response
             val response = highlightFlow.first()
 
             assertNotNull("Response is null", response)

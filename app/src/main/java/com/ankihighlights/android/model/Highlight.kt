@@ -6,10 +6,5 @@ import kotlinx.serialization.Serializable
 data class HighlightData(
     val word: String,
     val context: String,
-    val timestamp: Long
+    val timestamp: Long,
 )
-
-
-
-
-

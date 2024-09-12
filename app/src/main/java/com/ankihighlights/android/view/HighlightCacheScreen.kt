@@ -13,23 +13,20 @@ import com.ankihighlights.android.view.viewmodel.HighlightViewModel
 @Suppress("ktlint:standard:function-naming")
 @Composable
 fun HighlightCacheScreen(
-    intent: Intent? = null, // Pass the Intent if available
-    viewModel: HighlightViewModel = hiltViewModel(), // Obtain ViewModel using Hilt
+    intent: Intent? = null,
+    viewModel: HighlightViewModel = hiltViewModel(),
 ) {
-    // Process the incoming intent in the ViewModel
     LaunchedEffect(intent) {
         intent?.let {
-            viewModel.processIncomingIntent(it) // Process the intent
+            viewModel.processIncomingIntent(it)
         }
     }
 
-    // Collect the cached highlights from the ViewModel as state
     val cachedHighlights = viewModel.cachedHighlights.collectAsState()
 
-    // Display the cached highlights in a LazyColumn
     LazyColumn {
         items(cachedHighlights.value) { highlight ->
-            Text(text = highlight) // Render each highlight string
+            Text(text = highlight)
         }
     }
 }

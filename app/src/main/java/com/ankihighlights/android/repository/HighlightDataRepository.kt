@@ -16,18 +16,16 @@ class HighlightDataRepository
     @Inject
     constructor(
         private val highlightService: HighlightService,
-        private val highlightDao: HighlightDAO, // Inject DAO for Room
+        private val highlightDao: HighlightDAO,
     ) : HighlightRepository {
         override fun processHighlights(highlightData: HighlightData): Flow<HighlightResponse> =
             flow {
                 try {
-                    val response = highlightService.processHighlights(highlightData).execute()
+                    val response = highlightService.processHighlights(highlightData) // suspend call
                     if (response.isSuccessful) {
                         response.body()?.let {
                             emit(it)
-                        } ?: run {
-                            Log.e("HighlightRepo", "Response body is null")
-                        }
+                        } ?: Log.e("HighlightRepo", "Response body is null")
                     } else {
                         Log.e("HighlightRepo", "Response unsuccessful: ${response.errorBody()}")
                     }

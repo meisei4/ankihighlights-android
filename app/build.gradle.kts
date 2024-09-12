@@ -24,14 +24,6 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
-        }
-    }
-
     buildTypes {
         debug {
             val flaskApiUrl: String? = project.findProperty("FLASK_API_URL") as String?
@@ -40,6 +32,31 @@ android {
             } else {
                 throw IllegalStateException("FLASK_API_URL must not be null")
             }
+
+            val useFakeRepository: String? = project.findProperty("USE_FAKE_REPOSITORY") as String?
+            if (useFakeRepository != null) {
+                buildConfigField("boolean", "USE_FAKE_REPOSITORY", useFakeRepository)
+            } else {
+                throw IllegalStateException("USE_FAKE_REPOSITORY must not be null")
+            }
+        }
+
+        release {
+            // TODO: BuildConfig for production URL
+            //  buildConfigField("String", "BASE_URL", "\"https://your-production-url.com\"")
+
+            val useFakeRepository: String? = project.findProperty("USE_FAKE_REPOSITORY") as String?
+            if (useFakeRepository != null) {
+                buildConfigField("boolean", "USE_FAKE_REPOSITORY", useFakeRepository)
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
         }
     }
 

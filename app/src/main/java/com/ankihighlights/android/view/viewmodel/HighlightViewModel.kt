@@ -30,11 +30,11 @@ class HighlightViewModel
         }
 
         fun processIncomingIntent(intent: Intent?) {
-            val highlightedText = intent?.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
-            if (highlightedText != null) {
-                viewModelScope.launch {
-                    // Cache the highlighted string in Room
-                    repository.cacheHighlight(highlightedText)
+            intent?.getStringExtra(Intent.EXTRA_PROCESS_TEXT)?.let { highlightedText ->
+                if (highlightedText.isNotBlank()) {
+                    viewModelScope.launch {
+                        repository.cacheHighlight(highlightedText)
+                    }
                 }
             }
         }
