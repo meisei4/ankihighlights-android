@@ -1,9 +1,10 @@
 package com.ankihighlights.android.repository
 
+import com.ankihighlights.android.data.repository.NetworkHighlightRepository
+import com.ankihighlights.android.model.HighlightDTO
 import com.ankihighlights.android.model.HighlightData
 import com.ankihighlights.android.model.HighlightDataWrapper
 import com.ankihighlights.android.model.HighlightResponse
-import com.ankihighlights.android.model.dto.HighlightDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
